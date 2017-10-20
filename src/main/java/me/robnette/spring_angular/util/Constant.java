@@ -8,8 +8,7 @@ public class Constant {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String BEARER_AUTHENTICATION = "Bearer ";
 
-//    public static final long TOKEN_TIMEOUT_INMILISECOND = 3600000;
-    public static final long TOKEN_TIMEOUT_INMILISECOND = 1000;
+    public static final long TOKEN_TIMEOUT_INMILISECOND = 3600000;
     public static final String JWT_SECRET = "qzerAZER985aDF";
     public static final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
 
