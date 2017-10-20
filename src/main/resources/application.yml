@@ -1,0 +1,23 @@
+project:
+  base-dir: file:///C:\Users\xxx\Documents\proto\SpringAngular
+
+#password:
+#  salt: ee95a6FZ5sd8
+
+server:
+  port: 8080
+  contextPath: /SpringAngular
+
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+  datasource:
+    url: jdbc:mysql://localhost:3306/spring-jwt?useSSL=false
+    username: spring-jwt
+    password: user
+
+  resources:
+    static-locations: ${project.base-dir}/src/main/resources/static/
+    cache-period: 0
