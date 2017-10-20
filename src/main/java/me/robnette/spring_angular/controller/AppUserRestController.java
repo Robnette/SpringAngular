@@ -43,17 +43,17 @@ public class AppUserRestController {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<AppUser> deleteUser(@PathVariable Long id) {
+	public ResponseEntity<String> deleteUser(@PathVariable Long id) {
 		AppUser appUser = appUserRepository.findOne(id);
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String loggedUsername = auth.getName();
 		if (appUser == null) {
-			return new ResponseEntity<AppUser>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
 		} else if (appUser.getUsername().equalsIgnoreCase(loggedUsername)) {
 			throw new ForbiddenException("You cannot delete your account");
 		} else {
 			appUserRepository.delete(appUser);
-			return new ResponseEntity<AppUser>(appUser, HttpStatus.OK);
+			return new ResponseEntity<String>(HttpStatus.OK);
 		}
 
 	}
