@@ -2,6 +2,9 @@ package me.robnette.spring_angular.controller;
 
 import me.robnette.spring_angular.dao.AppUser;
 import me.robnette.spring_angular.exception.ForbiddenException;
+import me.robnette.spring_angular.model.UserPojo;
+import me.robnette.spring_angular.security.SecurityUser;
+import me.robnette.spring_angular.service.AppUserService;
 import me.robnette.spring_angular.util.Util;
 import me.robnette.spring_angular.repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,31 +23,22 @@ import java.util.*;
 public class HomeRestController {
 	@Autowired
 	private AppUserRepository appUserRepository;
+	@Autowired
+	private AppUserService appUserService;
 
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public ResponseEntity<AppUser> createUser(@RequestBody AppUser appUser) {
-		if (appUserRepository.findOneByUsername(appUser.getUsername()) != null) {
-			throw new ForbiddenException("Username already exist");
-		}
-
-		Util.passwordCheck(appUser.getPassword());
-
-		appUser.setPassword(Util.passwordEncode(appUser.getPassword()));
-		appUser.setUid(Util.getUid());
-
-		List<String> roles = new ArrayList<>();
-		roles.add("USER");
-		appUser.setRoles(roles);
-		return new ResponseEntity<AppUser>(appUserRepository.save(appUser), HttpStatus.CREATED);
+	public ResponseEntity<AppUser> createUser(@RequestBody UserPojo userPojo) {
+		AppUser appUser = appUserService.addUser(userPojo);
+		return new ResponseEntity<AppUser>(appUser, HttpStatus.CREATED);
 	}
 
 
 	@RequestMapping("/user")
-	public AppUser user(Principal principal) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String loggedUsername = auth.getName();
-		return appUserRepository.findOneByUsername(loggedUsername);
+	public AppUser user() {
+		SecurityUser securityUser = (SecurityUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String uid = securityUser.getUid();
+		return appUserRepository.findOneByUid(uid);
 	}
 
 
@@ -58,7 +52,7 @@ public class HomeRestController {
 		String passwordEncode = Util.passwordEncode(password);
 
 		if (appUser != null && appUser.getPassword().equals(passwordEncode)) {
-			token = Util.createToken(username, appUser.getRoles(), appUser.getUid());
+			token = Util.createToken(username, appUser.getAppUserRoles(), appUser.getUid());
 			tokenMap.put("token", token);
 			tokenMap.put("user", appUser);
 			return new ResponseEntity<Map<String, Object>>(tokenMap, HttpStatus.OK);

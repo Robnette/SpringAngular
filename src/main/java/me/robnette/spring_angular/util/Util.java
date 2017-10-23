@@ -1,5 +1,6 @@
 package me.robnette.spring_angular.util;
 
+import me.robnette.spring_angular.dao.AppUserRole;
 import me.robnette.spring_angular.exception.ForbiddenException;
 import me.robnette.spring_angular.security.SecurityUser;
 import io.jsonwebtoken.Claims;
@@ -22,7 +23,11 @@ public class Util {
         return java.util.UUID.randomUUID().toString();
     }
 
-    public static String createToken(String login, List<String> roles, String uid){
+    public static String createToken(String login, List<AppUserRole> appUserRolesList, String uid){
+        List<String> roles = new ArrayList<>();
+        for(AppUserRole appUserRoles : appUserRolesList){
+            roles.add(appUserRoles.getRole());
+        }
         return Jwts.builder()
                 .setSubject(login)
                 .claim(Constant.AUTHORITIES_KEY, roles)

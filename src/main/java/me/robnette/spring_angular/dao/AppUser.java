@@ -3,6 +3,8 @@ package me.robnette.spring_angular.dao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
+import me.robnette.spring_angular.model.UserPojo;
+import me.robnette.spring_angular.util.Util;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +19,7 @@ import java.util.List;
 public class AppUser implements UserDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private Long id;
 	private String name;
 
@@ -24,12 +27,64 @@ public class AppUser implements UserDetails {
 	private String username;
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
-	@ElementCollection
-	private List<String> roles = new ArrayList<>();
+
+//	@ElementCollection
+//	@CollectionTable(
+//			name="app_user_roles",
+//			joinColumns=@JoinColumn(name="app_user_id")
+//	)
+//	@Column(name="roles")
+//	@JsonProperty("roles")
+//	private List<String> appUserRoles = new ArrayList<>();
+
+//	private List<String> appUserRoles = new ArrayList<>();
+
+//	@ElementCollection
+//	@CollectionTable(
+//			name="app_user_roles",
+//			joinColumns=@JoinColumn(name="app_user_id")
+//	)
+////	@Column(name="roles")
+//	private List<AppUserRoles> appUserRoles2;
+
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "app_user_id", referencedColumnName = "id")
+	@JsonProperty(access = Access.WRITE_ONLY)
+	private List<AppUserRole> appUserRoles;
 
 	@Column(unique = true)
-	@JsonProperty(access = Access.WRITE_ONLY)
 	private String uid;
+
+	public AppUser() {
+	}
+
+	/**
+	 * for create only
+	 * */
+	public AppUser(UserPojo userPojo) {
+		if(uid != null){
+			throw new RuntimeException("Bad way for create user !");
+		}
+		Util.passwordCheck(userPojo.getPassword());
+
+		name = userPojo.getName();
+		username = userPojo.getUsername();
+		password = Util.passwordEncode(userPojo.getPassword());
+	}
+
+	/**
+	 * for update
+	 */
+	public void updateUser(UserPojo userPojo){
+		if(uid == null){
+			throw new RuntimeException("Bad way for update user !");
+		}
+		Util.passwordCheck(userPojo.getPassword());
+
+		name = userPojo.getName();
+		username = userPojo.getUsername();
+		password = Util.passwordEncode(userPojo.getPassword());
+	}
 
 	public Long getId() {
 		return id;
@@ -47,12 +102,21 @@ public class AppUser implements UserDetails {
 		this.name = name;
 	}
 
-	public List<String> getRoles() {
-		return roles;
+	public List<AppUserRole> getAppUserRoles() {
+		return appUserRoles;
 	}
 
-	public void setRoles(List<String> roles) {
-		this.roles = roles;
+	public void setAppUserRoles(List<AppUserRole> appUserRoles) {
+		this.appUserRoles = appUserRoles;
+	}
+
+	@JsonProperty("roles")
+	public List<String> getRoles(){
+		List<String> roles = new ArrayList<>();
+		for(AppUserRole role : appUserRoles){
+			roles.add(role.getRole());
+		}
+		return roles;
 	}
 
 	public void setUsername(String username) {
@@ -91,8 +155,8 @@ public class AppUser implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Collection<GrantedAuthority> authorities = new ArrayList<>();
-		for (String role : roles) {
-			authorities.add(new SimpleGrantedAuthority(role));
+	for (AppUserRole role : appUserRoles) {
+			authorities.add(new SimpleGrantedAuthority(role.getRole()));
 		}
 		return authorities;
 	}
@@ -114,4 +178,33 @@ public class AppUser implements UserDetails {
 	public void setUid(String uid) {
 		this.uid = uid;
 	}
+
+	@PrePersist
+	public void userPrePersist() {
+		uid = Util.getUid();
+	}
+//	@PostPersist
+//	public void userPostPersist() {
+//		System.out.println("Listening User Post Persist : " + getName());
+//	}
+//	@PostLoad
+//	public void userPostLoad() {
+//		System.out.println("Listening User Post Load : " + getName());
+//	}
+//	@PreUpdate
+//	public void userPreUpdate() {
+//		System.out.println("Listening User Pre Update : " + getName());
+//	}
+//	@PostUpdate
+//	public void userPostUpdate() {
+//		System.out.println("Listening User Post Update : " + getName());
+//	}
+//	@PreRemove
+//	public void userPreRemove() {
+//		System.out.println("Listening User Pre Remove : " + getName());
+//	}
+//	@PostRemove
+//	public void userPostRemove() {
+//		System.out.println("Listening User Post Remove : " + getName());
+//	}
 }

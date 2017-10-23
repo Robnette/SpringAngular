@@ -32,7 +32,7 @@ angular.module('JWTDemoApp')
 		$scope.buttonText = 'Create';
 	};
 	$scope.deleteUser = function(appUser) {
-		$http.delete('api/users/'+appUser.id).then(function(res) {
+		$http.delete('api/users/'+appUser.uid).then(function(res) {
 			$scope.deleteMessage ="Success!";
 			init();
 		}).catch(function(error) {

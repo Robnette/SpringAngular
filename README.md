@@ -5,3 +5,6 @@ De plus il faut configurer comme il faut projet.base-dir et la bdd mysql (applic
 
 
 url : http://localhost:8080/SpringAngular/
+
+login : admin
+password : admin

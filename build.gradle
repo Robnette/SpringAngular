@@ -1,4 +1,4 @@
-group 'fr.sully-group'
+group 'me.robnette'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'

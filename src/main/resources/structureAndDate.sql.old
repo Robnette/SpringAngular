@@ -8,13 +8,15 @@ CREATE TABLE `app_user` (
   UNIQUE KEY `uid_UNIQUE` (`uid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-CREATE TABLE `app_user_roles` (
+CREATE TABLE `app_user_role` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `app_user_id` int(11) DEFAULT NULL,
-  `roles` varchar(45) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `role` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1  DEFAULT CHARSET=utf8;
 
 
 insert into app_user(id,name,username,password, uid) values ('1', 'John Doe', 'admin', 'f5715af6bc4ba663e9a253bf23d615634a620941b411827f559b0ec2bf52e1ea', 'a6d4f42c-14cc-4e7c-9c69-3dcf3a961d71');
 
-insert into app_user_roles(app_user_id,roles) values (1,'ADMIN');
-insert into app_user_roles(app_user_id,roles) values (1,'USER');
+insert into app_user_roles(app_user_id,role) values (1, 1,'ADMIN');
+insert into app_user_roles(app_user_id,role) values (2, 1,'USER');
