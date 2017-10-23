@@ -10,6 +10,7 @@ public class AppUserRole {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long id;
+
     @Column(name="app_user_id")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long appUserId;

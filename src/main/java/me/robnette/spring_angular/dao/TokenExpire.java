@@ -19,7 +19,6 @@ public class TokenExpire {
 
     public TokenExpire(String code) {
         this.code = code;
-        expireAt = new Date();
     }
 
     public String getCode() {
@@ -39,8 +38,7 @@ public class TokenExpire {
     }
 
     @PrePersist
-    @PreUpdate
-    public void tokenSetDate(){
+    public void tokenSetNewExpireDate(){
         expireAt = new Date(new Date().getTime() + Constant.TOKEN_TIMEOUT_INMILISECOND);
     }
 }

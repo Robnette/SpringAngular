@@ -18,9 +18,6 @@ import java.util.Date;
 import java.util.List;
 
 public class Util {
-
-    private final static SignatureAlgorithm signatureAlgorithm = Constant.SIGNATURE_ALGORITHM;
-
     public static String getUid(){
         return java.util.UUID.randomUUID().toString();
     }
@@ -35,7 +32,7 @@ public class Util {
                 .claim(Constant.AUTHORITIES_KEY, roles)
                 .claim(Constant.UID_KEY, uid)
                 .setIssuedAt(new Date())
-                .signWith(signatureAlgorithm, Constant.JWT_SECRET)
+                .signWith(Constant.SIGNATURE_ALGORITHM, Constant.JWT_SECRET)
                 .compact();
     }
 
@@ -50,7 +47,7 @@ public class Util {
             throw new ForbiddenException("Token expired");
         }
 
-        tokenExpire.setExpireAt(new Date());
+        tokenExpire.tokenSetNewExpireDate();
         tokenRepository.save(tokenExpire);
 
         Claims claims = Jwts.parser().setSigningKey(Constant.JWT_SECRET).parseClaimsJws(token).getBody();
