@@ -1,7 +1,9 @@
 package me.robnette.spring_angular.util;
 
 import me.robnette.spring_angular.dao.AppUserRole;
+import me.robnette.spring_angular.dao.TokenExpire;
 import me.robnette.spring_angular.exception.ForbiddenException;
+import me.robnette.spring_angular.repository.TokenExpireRepository;
 import me.robnette.spring_angular.security.SecurityUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -32,21 +34,26 @@ public class Util {
                 .setSubject(login)
                 .claim(Constant.AUTHORITIES_KEY, roles)
                 .claim(Constant.UID_KEY, uid)
-                .claim(Constant.EXPIRE_TIME_KEY, new Date().getTime() + Constant.TOKEN_TIMEOUT_INMILISECOND)
                 .setIssuedAt(new Date())
                 .signWith(signatureAlgorithm, Constant.JWT_SECRET)
                 .compact();
     }
 
-    public static Authentication getAuthentication(String token){
-        Claims claims = Jwts.parser().setSigningKey(Constant.JWT_SECRET).parseClaimsJws(token).getBody();
-
-        long expireTime = (long)claims.get(Constant.EXPIRE_TIME_KEY);
+    public static Authentication getAuthentication(String token, TokenExpireRepository tokenRepository){
+        TokenExpire tokenExpire = tokenRepository.findOneByCode(token);
         Long currentTimeInMilisecond = new Date().getTime();
-        if(expireTime < currentTimeInMilisecond){
+        if(tokenExpire == null){
+            throw new ForbiddenException("Token expired");
+        }
+        if(tokenExpire.getExpireAt().getTime() < currentTimeInMilisecond) {
+            tokenRepository.delete(tokenExpire);
             throw new ForbiddenException("Token expired");
         }
 
+        tokenExpire.setExpireAt(new Date());
+        tokenRepository.save(tokenExpire);
+
+        Claims claims = Jwts.parser().setSigningKey(Constant.JWT_SECRET).parseClaimsJws(token).getBody();
         List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
 
         List<String> roles = (List<String>) claims.get(Constant.AUTHORITIES_KEY);

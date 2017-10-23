@@ -28,25 +28,6 @@ public class AppUser implements UserDetails {
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 
-//	@ElementCollection
-//	@CollectionTable(
-//			name="app_user_roles",
-//			joinColumns=@JoinColumn(name="app_user_id")
-//	)
-//	@Column(name="roles")
-//	@JsonProperty("roles")
-//	private List<String> appUserRoles = new ArrayList<>();
-
-//	private List<String> appUserRoles = new ArrayList<>();
-
-//	@ElementCollection
-//	@CollectionTable(
-//			name="app_user_roles",
-//			joinColumns=@JoinColumn(name="app_user_id")
-//	)
-////	@Column(name="roles")
-//	private List<AppUserRoles> appUserRoles2;
-
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "app_user_id", referencedColumnName = "id")
 	@JsonProperty(access = Access.WRITE_ONLY)
