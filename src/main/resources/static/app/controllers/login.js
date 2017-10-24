@@ -7,7 +7,7 @@ angular.module('JWTDemoApp')
 		$http({
 			url : 'authenticate',
 			method : "POST",
-			params : {
+			data : {
 				username : $scope.username,
 				password : $scope.password
 			}

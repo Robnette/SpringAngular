@@ -22,48 +22,6 @@ public class Util {
         return java.util.UUID.randomUUID().toString();
     }
 
-    public static String createToken(String login, List<AppUserRole> appUserRolesList, String uid){
-        List<String> roles = new ArrayList<>();
-        for(AppUserRole appUserRoles : appUserRolesList){
-            roles.add(appUserRoles.getRole());
-        }
-        return Jwts.builder()
-                .setSubject(login)
-                .claim(Constant.AUTHORITIES_KEY, roles)
-                .claim(Constant.UID_KEY, uid)
-                .setIssuedAt(new Date())
-                .signWith(Constant.SIGNATURE_ALGORITHM, Constant.JWT_SECRET)
-                .compact();
-    }
-
-    public static Authentication getAuthentication(String token, TokenExpireRepository tokenRepository){
-        TokenExpire tokenExpire = tokenRepository.findOneByCode(token);
-        Long currentTimeInMilisecond = new Date().getTime();
-        if(tokenExpire == null){
-            throw new ForbiddenException("Token expired");
-        }
-        if(tokenExpire.getExpireAt().getTime() < currentTimeInMilisecond) {
-            tokenRepository.delete(tokenExpire);
-            throw new ForbiddenException("Token expired");
-        }
-
-        tokenExpire.tokenSetNewExpireDate();
-        tokenRepository.save(tokenExpire);
-
-        Claims claims = Jwts.parser().setSigningKey(Constant.JWT_SECRET).parseClaimsJws(token).getBody();
-        List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
-
-        List<String> roles = (List<String>) claims.get(Constant.AUTHORITIES_KEY);
-        for (String role : roles) {
-            authorities.add(new SimpleGrantedAuthority(role));
-        }
-
-        SecurityUser principal = new SecurityUser(claims.getSubject(), "", authorities, (String)claims.get("uid"));
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                principal, "", authorities);
-        return usernamePasswordAuthenticationToken;
-    }
-
     public static void passwordCheck(String password) {
         if(! password.matches(Constant.PASSWORD_REGEX)){
             throw new ForbiddenException("Password not match (Minimum 8 characters in length. " +

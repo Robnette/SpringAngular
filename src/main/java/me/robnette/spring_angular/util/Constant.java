@@ -14,7 +14,7 @@ public class Constant {
 
     public final static String AUTHORITIES_KEY = "roles";
     public final static String UID_KEY = "uid";
-    public final static String EXPIRE_TIME_KEY = "expireTime";
+//    public final static String EXPIRE_TIME_KEY = "expireTime";
 
     //@Value("${password.salt:''}")
     public final static String PASSWORD_SALT = "ee95a6FZ5sd8";

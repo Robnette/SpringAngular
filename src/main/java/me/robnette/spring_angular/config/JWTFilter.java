@@ -1,8 +1,7 @@
 package me.robnette.spring_angular.config;
 
 import me.robnette.spring_angular.exception.ForbiddenException;
-import me.robnette.spring_angular.repository.TokenExpireRepository;
-import me.robnette.spring_angular.util.Util;
+import me.robnette.spring_angular.service.TokenService;
 import me.robnette.spring_angular.util.Constant;
 import io.jsonwebtoken.SignatureException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,16 +16,17 @@ import java.io.IOException;
 
 
 public class JWTFilter extends GenericFilterBean {
-	private TokenExpireRepository tokenRepository;
+	private TokenService tokenService;
+
+
 
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain filterChain)
 			throws IOException, ServletException {
 
-		if(tokenRepository == null){
-			ServletContext servletContext = req.getServletContext();
-			WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
-            tokenRepository = webApplicationContext.getBean(TokenExpireRepository.class);
+		if(tokenService == null){
+			WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(req.getServletContext());
+			tokenService = webApplicationContext.getBean(TokenService.class);
 		}
 
 		HttpServletRequest request = (HttpServletRequest) req;
@@ -36,7 +36,7 @@ public class JWTFilter extends GenericFilterBean {
 		} else {
 			try {
 				String token = authHeader.substring(Constant.BEARER_AUTHENTICATION.length());
-				SecurityContextHolder.getContext().setAuthentication(Util.getAuthentication(token, tokenRepository));
+				SecurityContextHolder.getContext().setAuthentication(tokenService.getAuthentication(token));
 				filterChain.doFilter(req, res);
 			} catch (SignatureException e) {
 				((HttpServletResponse) res).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");

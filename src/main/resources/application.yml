@@ -10,7 +10,7 @@ server:
 
 spring:
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: none
   datasource:
@@ -21,3 +21,14 @@ spring:
   resources:
     static-locations: ${project.base-dir}/src/main/resources/static/
     cache-period: 0
+
+#TRACE-DEBUG-INFO-WARN-ERROR
+logging:
+  file: logs/dev_app.log
+  pattern:
+#    console: "%d %-5level %logger : %msg%n"
+    file: "%d %-5level [%thread] %logger : %msg%n"
+  level:
+    me.robnette.spring_angular: INFO
+    org.springframework.web: WARN
+    org.hibernate: WARN

@@ -17,11 +17,4 @@ public class SecurityUser extends User {
     public String getUid() {
         return uid;
     }
-
-    @Override
-    public String toString() {
-        return "---------------------------------- SecurityUser{" +
-                "uid='" + uid + '\'' +
-                '}';
-    }
 }

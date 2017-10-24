@@ -74,16 +74,6 @@ public class AppUserRestController {
 	@RequestMapping(value = "/users", method = RequestMethod.PUT)
 	public AppUser updateUser(@RequestBody UserPojo userPojo) {
 		AppUser appUser = appUserService.updateUser(userPojo);
-
-//		AppUser appUser = appUserRepository.findOneByUid(userPojo.getUid());
-//		if(appUser == null){
-//			throw new ForbiddenException("User unknown");
-//		}
-//		if (! appUser.getUsername().equals(userPojo.getUsername()) && appUserRepository.findOneByUsername(userPojo.getUsername()) != null) {
-//			throw new ForbiddenException("Username already exist");
-//		}
-//		appUser.updateUser(userPojo);
-//		return appUserRepository.save(appUser);
 		return appUser;
 	}
 

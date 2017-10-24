@@ -2,15 +2,14 @@ package me.robnette.spring_angular.dao;
 
 import me.robnette.spring_angular.util.Constant;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 public class TokenExpire {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String code;
     private Date expireAt;
 
@@ -19,6 +18,14 @@ public class TokenExpire {
 
     public TokenExpire(String code) {
         this.code = code;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getCode() {
@@ -38,7 +45,7 @@ public class TokenExpire {
     }
 
     @PrePersist
-    public void tokenSetNewExpireDate(){
+    public void setNewExpireDate(){
         expireAt = new Date(new Date().getTime() + Constant.TOKEN_TIMEOUT_INMILISECOND);
     }
 }
