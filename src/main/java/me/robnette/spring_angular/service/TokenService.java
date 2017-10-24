@@ -74,6 +74,8 @@ public class TokenService {
 
     public void deleteToken(String token){
         TokenExpire tokenExpire = tokenRepository.findOneByCode(token);
-        tokenRepository.delete(tokenExpire);
+        if(tokenExpire != null){
+            tokenRepository.delete(tokenExpire);
+        }
     }
 }

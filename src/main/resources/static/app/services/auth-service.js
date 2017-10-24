@@ -4,9 +4,7 @@ angular.module('JWTDemoApp')
 	return {
 		user : null,
 		disconnect: function(){
-		    $http.post('logout').then(function(res) {
-		    }).catch(function(error) {
-            });
+		    $http.post('logout');
 		    this.user = null;
 		    delete $http.defaults.headers.common.Authorization
             localStorage.removeItem('tokenAndUser');

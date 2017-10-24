@@ -18,7 +18,7 @@ import java.util.List;
 @Entity
 public class AppUser implements UserDetails {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private Long id;
 	private String name;

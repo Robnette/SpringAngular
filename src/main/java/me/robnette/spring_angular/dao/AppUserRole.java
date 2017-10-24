@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Entity
 public class AppUserRole {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long id;
 
