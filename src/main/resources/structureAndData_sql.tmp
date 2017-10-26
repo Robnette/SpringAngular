@@ -16,7 +16,7 @@ CREATE TABLE `app_user_role` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `app_user_id` int(11) DEFAULT NULL,
   `role` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
   KEY `app_user_id_idx` (`app_user_id`),
   CONSTRAINT `app_user_id` FOREIGN KEY (`app_user_id`) REFERENCES `app_user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=1  DEFAULT CHARSET=utf8;
