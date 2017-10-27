@@ -10,7 +10,7 @@ angular.module('JWTDemoApp').config(function($stateProvider, $urlRouterProvider)
 		url : '',
 		views : {
 			'nav@' : {
-				templateUrl : 'app/views/nav.html',
+				templateUrl : 'app/angular/views/nav.html',
 				controller : 'NavController'
 			}
 		}
@@ -19,7 +19,7 @@ angular.module('JWTDemoApp').config(function($stateProvider, $urlRouterProvider)
 		url : '/login',
 		views : {
 			'content@' : {
-				templateUrl : 'app/views/login.html',
+				templateUrl : 'app/angular/views/login.html',
 				controller : 'LoginController'
 			}
 		}
@@ -31,7 +31,7 @@ angular.module('JWTDemoApp').config(function($stateProvider, $urlRouterProvider)
 		},
 		views : {
 			'content@' : {
-				templateUrl : 'app/views/users.html',
+				templateUrl : 'app/angular/views/users.html',
 				controller : 'UsersController',
 			}
 		}
@@ -40,7 +40,7 @@ angular.module('JWTDemoApp').config(function($stateProvider, $urlRouterProvider)
 		url : '/',
 		views : {
 			'content@' : {
-				templateUrl : 'app/views/home.html',
+				templateUrl : 'app/angular/views/home.html',
 				controller : 'HomeController'
 			}
 		}
@@ -49,7 +49,7 @@ angular.module('JWTDemoApp').config(function($stateProvider, $urlRouterProvider)
 		url : '/page-not-found',
 		views : {
 			'content@' : {
-				templateUrl : 'app/views/page-not-found.html',
+				templateUrl : 'app/angular/views/page-not-found.html',
 				controller : 'PageNotFoundController'
 			}
 		}
@@ -58,7 +58,7 @@ angular.module('JWTDemoApp').config(function($stateProvider, $urlRouterProvider)
 		url : '/access-denied',
 		views : {
 			'content@' : {
-				templateUrl : 'app/views/access-denied.html',
+				templateUrl : 'app/angular/views/access-denied.html',
 				controller : 'AccessDeniedController'
 			}
 		}
@@ -67,7 +67,7 @@ angular.module('JWTDemoApp').config(function($stateProvider, $urlRouterProvider)
 		url : '/register',
 		views : {
 			'content@' : {
-				templateUrl : 'app/views/register.html',
+				templateUrl : 'app/angular/views/register.html',
 				controller : 'RegisterController'
 			}
 		}

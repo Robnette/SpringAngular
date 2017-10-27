@@ -33,11 +33,7 @@ public class Util {
         }
     }
 
-    public static String passwordEncode(String rawPassword){
-        return sha256(rawPassword);
-    }
-
-    private static String sha256(String password) {
+    public static String passwordEncode(String password) {
         try{
             String base = password.concat(Constant.PASSWORD_SALT);
             MessageDigest digest = MessageDigest.getInstance("SHA-256");

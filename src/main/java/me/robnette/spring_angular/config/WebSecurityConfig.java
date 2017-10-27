@@ -20,7 +20,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configure(WebSecurity web) throws Exception {
 
 		web.ignoring()
-				.antMatchers("/", "/index.html", "/lib/**", "/app/**", "/register", "/authenticate", "/logout", "/favicon.ico");
+				.antMatchers("/", "/index.html",
+						"/angular", "/angular.html",
+						"/vue", "/vue.html",
+						"/lib/**", "/app/**",
+						"/register", "/authenticate", "/logout",
+						"/favicon.ico");
 	}
 
 	// This method is used for override HttpSecurity of the web Application.
@@ -42,5 +47,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				// disabling the CSRF - Cross Site Request Forgery
 				.csrf().disable();
 	}
-
 }

@@ -48,9 +48,12 @@ public class HomeRestController {
 		return appUserRepository.findOneByUid(uid);
 	}
 
-
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
 	public ResponseEntity<Map<String, Object>> login(@RequestBody LoginPojo logiPojo){
+		Map<String, Object> tokenMap = new HashMap<String, Object>();
+		if(logiPojo.getUsername() == null || logiPojo.getPassword() == null){
+			return new ResponseEntity<Map<String, Object>>(tokenMap, HttpStatus.UNAUTHORIZED);
+		}
 
 		log.trace("---------- trace ------------- authenticate Log");
 		log.debug("---------- debug ------------- authenticate Log");
@@ -58,19 +61,16 @@ public class HomeRestController {
 		log.warn("---------- warn ------------- authenticate Log");
 		log.error("---------- error ------------- authenticate Log");
 
-		String token = null;
 		AppUser appUser = appUserRepository.findOneByUsername(logiPojo.getUsername());
-		Map<String, Object> tokenMap = new HashMap<String, Object>();
-
 		String passwordEncode = Util.passwordEncode(logiPojo.getPassword());
 
 		if (appUser != null && appUser.getPassword().equals(passwordEncode)) {
-			token = tokenService.createToken(logiPojo.getUsername(), appUser.getAppUserRoles(), appUser.getUid());
+			String token = tokenService.createToken(logiPojo.getUsername(), appUser.getAppUserRoles(), appUser.getUid());
 			tokenMap.put("token", token);
 			tokenMap.put("user", appUser);
 			return new ResponseEntity<Map<String, Object>>(tokenMap, HttpStatus.OK);
 		} else {
-			tokenMap.put("token", null);
+//			tokenMap.put("token", null);
 			return new ResponseEntity<Map<String, Object>>(tokenMap, HttpStatus.UNAUTHORIZED);
 		}
 	}

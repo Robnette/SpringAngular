@@ -33,7 +33,7 @@ angular.module('JWTDemoApp')
 			} else {
 				// if the token is not present in the response then the
 				// authentication was not successful. Setting the error message.
-				$scope.message = 'Authetication Failed !';
+				$scope.message = 'Authentication Failed !';
 			}
 		}).catch(function(error) {
 			// if authentication was not successful. Setting the error message.
