@@ -1,4 +1,5 @@
 project:
+  #TODO don't forget to give a good path
   base-dir: file:///C:\Users\xxx\Documents\proto\SpringAngular
 
 #password:
@@ -14,13 +15,12 @@ spring:
     hibernate:
       ddl-auto: none
   datasource:
-      url: jdbc:postgresql://localhost/postgres
-      username: postgres
-      password: postgres
-#  datasource:
-#    url: jdbc:mysql://localhost:3306/spring-jwt?useSSL=false
-#    username: spring-jwt
-#    password: user
+#      url: jdbc:postgresql://localhost/postgres
+#      username: postgres
+#      password: postgres
+    url: jdbc:mysql://localhost:3306/spring-jwt?useSSL=false
+    username: spring-jwt
+    password: user
 
   resources:
     static-locations: ${project.base-dir}/src/main/resources/static/

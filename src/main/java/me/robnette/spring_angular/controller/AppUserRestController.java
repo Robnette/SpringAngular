@@ -20,61 +20,61 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api")
 public class AppUserRestController {
-	@Autowired
-	private AppUserRepository appUserRepository;
-	@Autowired
-	private AppUserService appUserService;
+    @Autowired
+    private AppUserRepository appUserRepository;
+    @Autowired
+    private AppUserService appUserService;
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "/users", method = RequestMethod.GET)
-	public List<AppUser> users() {
-		return appUserRepository.findAll();
-	}
-
-
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "/users/{uid}", method = RequestMethod.GET)
-	public ResponseEntity<AppUser> userByUid(@PathVariable String uid) {
-		AppUser appUser = appUserRepository.findOneByUid(uid);
-		if (appUser == null) {
-			return new ResponseEntity<AppUser>(HttpStatus.NO_CONTENT);
-		} else {
-			return new ResponseEntity<AppUser>(appUser, HttpStatus.OK);
-		}
-	}
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @RequestMapping(value = "/users", method = RequestMethod.GET)
+    public List<AppUser> users() {
+        return appUserRepository.findAll();
+    }
 
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "/users/{uid}", method = RequestMethod.DELETE)
-	public ResponseEntity<String> deleteUser(@PathVariable String uid) {
-		SecurityUser securityUser = (SecurityUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (securityUser.getUid().equals(uid)) {
-			throw new ForbiddenException("You cannot delete your account");
-		}
-
-		AppUser appUser = appUserRepository.findOneByUid(uid);
-		if (appUser == null) {
-			return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
-		} else {
-			appUserRepository.delete(appUser);
-			return new ResponseEntity<String>(HttpStatus.OK);
-		}
-
-	}
-
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "/users", method = RequestMethod.POST)
-	public ResponseEntity<AppUser> createUser(@RequestBody UserPojo userPojo) {
-		AppUser appUser = appUserService.addUser(userPojo);
-		return new ResponseEntity<AppUser>(appUserRepository.save(appUser), HttpStatus.CREATED);
-	}
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @RequestMapping(value = "/users/{uid}", method = RequestMethod.GET)
+    public ResponseEntity<AppUser> userByUid(@PathVariable String uid) {
+        AppUser appUser = appUserRepository.findOneByUid(uid);
+        if (appUser == null) {
+            return new ResponseEntity<AppUser>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<AppUser>(appUser, HttpStatus.OK);
+        }
+    }
 
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "/users", method = RequestMethod.PUT)
-	public AppUser updateUser(@RequestBody UserPojo userPojo) {
-		AppUser appUser = appUserService.updateUser(userPojo);
-		return appUser;
-	}
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @RequestMapping(value = "/users/{uid}", method = RequestMethod.DELETE)
+    public ResponseEntity<String> deleteUser(@PathVariable String uid) {
+        SecurityUser securityUser = (SecurityUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (securityUser.getUid().equals(uid)) {
+            throw new ForbiddenException("You cannot delete your account");
+        }
+
+        AppUser appUser = appUserRepository.findOneByUid(uid);
+        if (appUser == null) {
+            return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
+        } else {
+            appUserRepository.delete(appUser);
+            return new ResponseEntity<String>(HttpStatus.OK);
+        }
+
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    public ResponseEntity<AppUser> createUser(@RequestBody UserPojo userPojo) {
+        AppUser appUser = appUserService.addUser(userPojo);
+        return new ResponseEntity<AppUser>(appUserRepository.save(appUser), HttpStatus.CREATED);
+    }
+
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @RequestMapping(value = "/users", method = RequestMethod.PUT)
+    public AppUser updateUser(@RequestBody UserPojo userPojo) {
+        AppUser appUser = appUserService.updateUser(userPojo);
+        return appUser;
+    }
 
 }

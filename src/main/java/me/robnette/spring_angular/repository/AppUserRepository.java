@@ -7,7 +7,7 @@ import java.util.List;
 
 
 public interface AppUserRepository extends CrudRepository<AppUser, Long> {
-	public AppUser findOneByUid(String uid);
-	public AppUser findOneByUsername(String username);
-	public List<AppUser> findAll();
+    public AppUser findOneByUid(String uid);
+    public AppUser findOneByUsername(String username);
+    public List<AppUser> findAll();
 }

@@ -112,7 +112,7 @@ var RegisterView = {
                     username: null,
                     password: null
                 };
-            	this.confirmPassword = null;
+                this.confirmPassword = null;
                 this.message = "Registration successfull !";
             }).catch(function(error) {
                 this.message = error.data.message;
@@ -123,20 +123,20 @@ var RegisterView = {
 // Create the router
 var router = new VueRouter({
     root: '',
-//	base: window.location.href,
-	routes: [
-		{
-		    path: '/',
-		    component: HomeView,
+//    base: window.location.href,
+    routes: [
+        {
+            path: '/',
+            component: HomeView,
             beforeEnter: function (to, from, next) {
                 console.log("router HomeView beforeEnter");
                 next();
             }
 
         },
-		{
-		    path: '/login',
-		    component: LoginView,
+        {
+            path: '/login',
+            component: LoginView,
             beforeEnter: function (to, from, next) {
                 console.log("router LoginView beforeEnter");
                 if(Vue.http.headers.common.Authorization){
@@ -146,9 +146,9 @@ var router = new VueRouter({
                 }
             }
         },
-		{
-		    path: '/register',
-		    component: RegisterView,
+        {
+            path: '/register',
+            component: RegisterView,
             beforeEnter: function (to, from, next) {
                 console.log("router RegisterView beforeEnter");
                 if(Vue.http.headers.common.Authorization){
@@ -162,32 +162,32 @@ var router = new VueRouter({
             path: '*',
             component: Page404
         }
-	]
+    ]
 });
 
 
 var app = new Vue({
-	router,
-	el: '#vueApp',
-	data: {
-	    user: null
-	},
-	methods: {
-	    consoleLog: function(){
-	        console.log("test ?");
-	    }
-	},
-	beforeCreate: function(){
-	    console.log("beforeCreate");
-	},
-	created: function(){
-	    console.log("created");
-	    var tokenAndUser = JSON.parse(localStorage.getItem('tokenAndUser'));
+    router,
+    el: '#vueApp',
+    data: {
+        user: null
+    },
+    methods: {
+        consoleLog: function(){
+            console.log("test ?");
+        }
+    },
+    beforeCreate: function(){
+        console.log("beforeCreate");
+    },
+    created: function(){
+        console.log("created");
+        var tokenAndUser = JSON.parse(localStorage.getItem('tokenAndUser'));
         if(tokenAndUser == null){
             this.$router.replace("/login");
         }else{
             Vue.http.headers.common['Authorization'] = 'Bearer ' + tokenAndUser.token;
             this.user = tokenAndUser.user;
         }
-	}
+    }
 });
