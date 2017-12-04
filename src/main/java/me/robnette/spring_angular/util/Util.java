@@ -11,13 +11,21 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class Util {
+
+    private static String UPLOADED_FOLDER = "c://temp//";
+
     public static String getUid(){
         return java.util.UUID.randomUUID().toString();
     }
@@ -50,5 +58,21 @@ public class Util {
         } catch(Exception ex){
             throw new RuntimeException(ex);
         }
+    }
+
+    public static void saveUploadedFiles(List<MultipartFile> files) throws IOException {
+
+        for (MultipartFile file : files) {
+
+            if (file.isEmpty()) {
+                continue; //next pls
+            }
+
+            byte[] bytes = file.getBytes();
+            Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
+            Files.write(path, bytes);
+
+        }
+
     }
 }
